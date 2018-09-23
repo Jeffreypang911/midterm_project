@@ -19,6 +19,7 @@
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
   <script type="text/javascript" src="/scripts/owner.js"></script>
+  <script type="text/javascript" src="/scripts/complete.js"></script>
 </head>
 
 <body>
@@ -31,47 +32,24 @@
   </nav>
 
   <div class="container">
-
-    <h1>ORDERS</h1>
     <div class="row">
-
-      <div class="col-12">
-        <div class=card>
-          <p class="card-title">Order Summary</p>
-          <form id="completebutton" class="form-inline">
-              <input class="btn btn-outline-secondary" type="submit" value="Ready for Pickup">
-          </form>
+      <div class="col-6" id="pendingcolumn">
+        <h1>Pending Orders</h1>
+        <div class="row" id="pendingorder">
+          <div class="col-12" id='ordercontainer'>
+          </div>
         </div>
       </div>
-
-      <div class="col-12">
-        <div class=card>
-          <p class="card-title">Order Summary</p>
-          <form class="form-inline">
-            <input id="completebutton" class="btn btn-outline-secondary" type="button" value="Ready for Pickup">
-          </form>
+      <div class="col-6" id="completedcolumn">
+        <h1>Completed Orders</h1>
+        <div class="row" id="completedorder">
+          <div class="col-12">
+            <div id='completecontainer' class=card>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
-
-    <h1>COMPLETED</h1>
-    <div class="row">
-
-      <div class="col-12">
-        <div class=card>
-          <p class="card-title">Order Summary</p>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class=card>
-          <p class="card-title">Order Summary</p>
-        </div>
-      </div>
-
-    </div>
-
   </div>
 
 
@@ -83,10 +61,10 @@
               </div>
               <div class="col-2">
                 <p>
-                    401 W Georgia St #600 
+                    401 W Georgia St #600
                     <br>
                     Vancouver
-                    <br> 
+                    <br>
                     British Columbia
                     <br>
                     V6B 5A1

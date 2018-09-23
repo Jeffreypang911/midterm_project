@@ -27,43 +27,50 @@ const createMenu = function (item) {
 
     const renderMenu = function (items) {
       items.forEach(function(pizza) {
-        $('#menuContainer').prepend(createMenu(pizza));
+        $('#menucontainer').prepend(createMenu(pizza));
       })
     }
 
-    const loadMenu = function () {
-      $.ajax('/customer/menu', { method: 'GET' })
-      .then(function (pizzas) {
-        renderMenu(pizzas);
-      })
-    }
+  const loadMenu = function () {
+    $.ajax('/customer/menu', { method: 'GET' })
+    .then(function (pizzas) {
+      renderMenu(pizzas);
+    })
+  }
 
-    loadMenu();
-    //Create, Render and Load Menu Items -- End
+  loadMenu();
+  //Create, Render and Load Menu Items -- End
 
+  //Create and Render Shopping Cart -- Start
+  const createCartElement = function (shoppingItem) {
+    let $cart = $('<div>').addClass('card-body')
+    let $cartName = $('<p>').addClass('card-title').text(shoppingItem.pizza_name);
+    let $cartQuan = $('<p>').addClass('card-subtitle').text(shoppingItem.qty);
+    let $cartPrice = $('<p>').addClass('card-subtitle').text(shoppingItem.sub_total);
+    let $cartURL = $('<img>').attr('src', shoppingItem.url);
+    $cart.append($cartName, $cartURL, $cartQuan, $cartPrice);
+    return $cart;
+  }
 
-    //Create and Render Shopping Cart -- Start
-    const createCartElement = function (shoppingItem){
-        let $cart = $('<div>').addClass('card-body')
-        let $cartName = $('<h5>').addClass('card-title').text(shoppingItem.pizza_name);
-        let $cartQuan = $('<h5>').addClass('card-subtitle').text(shoppingItem.qty);
-        let $cartPrice = $('<h6>').addClass('card-subtitle').text(shoppingItem.sub_total);
-        $cart.append($cartName, $cartQuan, $cartPrice);
-        return $cart;
-    }
-    const renderCart = function (shoppingItems) {
-        shoppingItems.forEach(function(shoppingItem){
-        $('#cartContainer').append(createCartElement(shoppingItem));
-        })
-    }
-    // Create and Render Shopping Cart -- Ends
+  const renderCart = function (shoppingItems) {
+    let total = 0;
+    let totalqty =0;
+    // let baseTime = 0;
+    shoppingItems.forEach(function(shoppingItem){
+      total = total += parseInt(shoppingItem.sub_total);
+      totalqty = totalqty += parseInt(shoppingItem.qty)
 
+      $('#totalMoney').text(`$: ${total}`);
+      $('#time').text(`Estimated time ${totalqty *5 + 20} min`);
+      $('#cartcontainer').append(createCartElement(shoppingItem));
+    })
+  }
+  // Create and Render Shopping Cart -- Ends
 
     //Add a item to shopping cart when valid quantity enter and click the add button-- Start
-    let $menuContainer = $('#menuContainer');
+    let $menuContainer = $('#menucontainer');
 
     $menuContainer.on('click', '*[data-add-pizza]', function(event) {
-      console.log('Button clicked')
         event.preventDefault();
         let $this = $(this);
         let quant = $this.siblings('input[data-add-quantity]').val();
@@ -84,10 +91,9 @@ const createMenu = function (item) {
                   url: "/customer/cart",
                   data: formData,
                   success: function(result){
-                    alert("in then function")
                     errorMsg.empty();
                     $this.siblings('input[data-add-quantity]').val('');
-                    $('#cartContainer').empty();
+                    $('#cartcontainer').empty();
                     $.ajax
                     ({
                       method:'get',
@@ -97,7 +103,6 @@ const createMenu = function (item) {
                         renderCart(result);
                       },
                       error: function(err){
-                        alert("We are in error")
                         console.log("there was an error");
                       }
                     })
@@ -108,16 +113,18 @@ const createMenu = function (item) {
               });
         };
     });
-    //Add a item to shopping cart when valid quantity enter and click the add button -- End
+//Add a item to shopping cart when valid quantity enter and click the add button -- End
 
-    //Load shopping cart -- Start
-    const loadCart = function (){
-        $.ajax('/customer/cart', {method: 'GET'})
-        .then(function(shoppingItems){
-            renderCart(shoppingItems);
-        });
-    };
-    loadCart();
-    //Load shopping cart -- End
+  //Load shopping cart -- Start
+  const loadCart = function () {
+    $.ajax('/customer/cart', {
+        method: 'GET'
+      })
+      .then(function (shoppingItems) {
+        renderCart(shoppingItems);
+      });
+  };
+  loadCart();
+  //Load shopping cart -- End
 
 });
